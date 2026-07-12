@@ -1,0 +1,23 @@
+Course,Category,Description,Level,Duration,Rating
+Python Basics,Python,Learn Python programming from scratch,Beginner,4 Weeks,4.8
+Object Oriented Programming,Python,Object-oriented programming using Python,Intermediate,5 Weeks,4.7
+Flask Web Development,Python,Build web applications with Flask,Intermediate,6 Weeks,4.9
+Python for Data Science,Python,Python libraries for data analysis and visualization,Advanced,8 Weeks,4.8
+HTML & CSS,Web Development,Create responsive web pages using HTML and CSS,Beginner,3 Weeks,4.7
+JavaScript Essentials,Web Development,Learn JavaScript for interactive websites,Intermediate,5 Weeks,4.8
+React JS,Web Development,Build modern frontends using React,Advanced,7 Weeks,4.9
+Machine Learning Basics,Artificial Intelligence,Introduction to machine learning concepts,Beginner,6 Weeks,4.8
+Deep Learning,Artificial Intelligence,Learn neural networks and deep learning,Advanced,8 Weeks,4.9
+TensorFlow Fundamentals,Artificial Intelligence,Build AI models using TensorFlow,Intermediate,6 Weeks,4.8
+Neural Networks,Artificial Intelligence,Understand neural network architectures,Advanced,7 Weeks,4.9
+Pandas,Data Science,Data manipulation and analysis using Pandas,Beginner,3 Weeks,4.8
+NumPy,Data Science,Numerical computing with NumPy,Intermediate,4 Weeks,4.7
+Data Visualization,Data Science,Visualize data using Matplotlib and Seaborn,Intermediate,5 Weeks,4.8
+SQL for Data Science,Data Science,SQL queries for data analysis,Beginner,4 Weeks,4.7
+Ethical Hacking,Cyber Security,Introduction to ethical hacking techniques,Intermediate,6 Weeks,4.8
+Network Security,Cyber Security,Protect computer networks from attacks,Advanced,7 Weeks,4.8
+Linux Security,Cyber Security,Secure Linux systems and servers,Intermediate,5 Weeks,4.7
+AWS Cloud,Cloud Computing,Deploy applications on AWS cloud,Intermediate,6 Weeks,4.9
+Docker Fundamentals,Cloud Computing,Containerization using Docker,Beginner,4 Weeks,4.8
+Microsoft Azure,Cloud Computing,Cloud services using Microsoft Azure,Advanced,7 Weeks,4.8
+Java Programming,Programming,Learn Java Programming,Beginner,6 Weeks,4.7
