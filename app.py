@@ -9,7 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from werkzeug.security import generate_password_hash, check_password_hash
 from sklearn.metrics.pairwise import cosine_similarity
 from routes.courses import courses_bp
-
+from routes.profile import profile_bp
 
 app = Flask(__name__)
 
@@ -27,44 +27,13 @@ app.register_blueprint(dashboard_bp)
 
 app.register_blueprint(courses_bp)
 
+app.register_blueprint(profile_bp)
+
 # Home Page
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
-@app.route("/profile")
-@login_required
-def profile():
-
-    user = db.session.get(User, session["user_id"])
-
-    return render_template(
-        "profile.html",
-        user=user
-    )
-
-@app.route("/edit_profile", methods=["GET", "POST"])
-def edit_profile():
-
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
-
-    user = db.session.get(User, session["user_id"])
-
-    if request.method == "POST":
-
-        user.name = request.form["name"]
-        user.email = request.form["email"]
-
-        db.session.commit()
-
-        return redirect(url_for("profile"))
-
-    return render_template(
-        "edit_profile.html",
-        user=user
-    )
 
 @app.route("/courses_page")
 def courses_page():
