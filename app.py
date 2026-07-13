@@ -1,123 +1,41 @@
-from flask import Flask, render_template, request, session, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_migrate import Migrate
+from models import db, User, Course
+from routes.dashboard import dashboard_bp
+from routes.auth import auth
+from utils import login_required
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from werkzeug.security import generate_password_hash, check_password_hash
 from sklearn.metrics.pairwise import cosine_similarity
+from routes.courses import courses_bp
+
+
 app = Flask(__name__)
 
-app.secret_key = "your_super_secret_key"
-
-# Database Configuration
+app.config["SECRET_KEY"] = "your_secret_key"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
-# User Table
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
+migrate = Migrate(app, db)
 
-# Course Table
-class Course(db.Model):
+app.register_blueprint(auth)
 
-    id = db.Column(db.Integer, primary_key=True)
+app.register_blueprint(dashboard_bp)
 
-    course = db.Column(db.String(200))
-
-    category = db.Column(db.String(100))
-
-    description = db.Column(db.Text)
-
-    level = db.Column(db.String(50))
-
-    duration = db.Column(db.String(50))
-
-    rating = db.Column(db.Float)
+app.register_blueprint(courses_bp)
 
 # Home Page
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# Login Page
-@app.route("/login", methods=["GET", "POST"])
-def login():
-
-    if request.method == "POST":
-
-        email = request.form["email"]
-        password = request.form["password"]
-
-        user = User.query.filter_by(email=email).first()
-
-        if user and check_password_hash(user.password, password):
-
-            session["user_id"] = user.id
-
-            session["user_name"] = user.name
-
-            courses = Course.query.all()
-
-            total_courses = len(courses)
-
-            average_rating = round(
-                sum(c.rating for c in courses) / total_courses,
-                1
-            ) if total_courses else 0
-
-            total_categories = len(set(c.category for c in courses))
-
-            return redirect(url_for("dashboard"))
-            
-
-        else:
-            return "<h2>❌ Invalid Email or Password</h2><br><a href='/login'>Try Again</a>"
-
-    return render_template("login.html")
-
-@app.route("/dashboard")
-def dashboard():
-
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-    user = User.query.get(session["user_id"])
-
-    courses = Course.query.all()
-
-    total_courses = len(courses)
-
-    average_rating = round(
-        sum(c.rating for c in courses) / total_courses,
-        1
-    ) if total_courses else 0
-
-    total_categories = len(set(c.category for c in courses))
-
-    return render_template(
-        "dashboard.html",
-        user=user,
-        total_courses=total_courses,
-        average_rating=average_rating,
-        total_categories=total_categories
-    )
-
-@app.route("/logout")
-def logout():
-
-    session.clear()
-
-    return redirect(url_for("home"))
 
 @app.route("/profile")
+@login_required
 def profile():
-
-    if "user_id" not in session:
-        return redirect(url_for("login"))
 
     user = db.session.get(User, session["user_id"])
 
@@ -130,7 +48,7 @@ def profile():
 def edit_profile():
 
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     user = db.session.get(User, session["user_id"])
 
@@ -157,47 +75,17 @@ def courses_page():
 def about():
     return render_template("about.html")
 
-# Register Page
-@app.route("/register", methods=["GET", "POST"])
-def register():
-
-    if request.method == "POST":
-
-        name = request.form["name"]
-        email = request.form["email"]
-        password = request.form["password"]
-
-        existing_user = User.query.filter_by(email=email).first()
-
-        if existing_user:
-            return """
-            <h2>❌ Email already registered!</h2>
-            <br>
-            <a href='/register'>Try Another Email</a>
-            """
-
-        hashed_password = generate_password_hash(password)
-        
-        new_user = User(
-            name=name,
-            email=email,
-            password=hashed_password
-        )
-
-        db.session.add(new_user)
-        db.session.commit()
-
-        return "<h2>Registration Successful! 🎉</h2><br><a href='/login'>Go to Login</a>"
-
-    return render_template("register.html")
 
 @app.route("/users")
+@login_required
 def users():
+
     all_users = User.query.all()
     return render_template("users.html", users=all_users)
-@app.route("/recommend", methods=["POST"])
-def recommend():
 
+@app.route("/recommend", methods=["POST"])
+@login_required
+def recommend():
     interest = request.form["interest"]
 
     # Read courses from SQLite
@@ -262,8 +150,9 @@ def recommend():
     )
 
 @app.route("/search", methods=["POST"])
+@login_required
 def search():
-
+    
     query = request.form["query"]
 
     courses = Course.query.all()
@@ -292,33 +181,6 @@ def search():
         courses=courses
     )
 
-@app.route("/add_course", methods=["POST"])
-def add_course():
-
-    new_course = Course(
-        course=request.form["course"],
-        category=request.form["category"],
-        description=request.form["description"],
-        level=request.form["level"],
-        duration=request.form["duration"],
-        rating=float(request.form["rating"])
-    )
-
-    db.session.add(new_course)
-    db.session.commit()
-
-    return """
-    <h2>✅ Course Added Successfully!</h2>
-
-    <br>
-
-    <a href="/admin">Add Another Course</a>
-
-    <br><br>
-
-    <a href="/">Home</a>
-    """
-
 @app.route("/import")
 def import_courses():
 
@@ -345,17 +207,31 @@ def import_courses():
 
     return "<h2>✅ Courses Imported Successfully!</h2>"
 
-@app.route("/courses")
-def courses():
+@app.route("/admin")
+@login_required
+def admin():
 
-    all_courses = Course.query.all()
+    user = db.session.get(User, session["user_id"])
 
-    html = "<h2>Courses in Database</h2><hr>"
+    if user.role != "admin":
+        return "Access Denied", 403
 
-    for c in all_courses:
-        html += f"<p>{c.course} | {c.category} | ⭐ {c.rating}</p>"
+    total_users = User.query.count()
+    total_courses = Course.query.count()
 
-    return html
+    average_rating = round(
+        db.session.query(db.func.avg(Course.rating)).scalar() or 0,
+        1
+    )
+
+    return render_template(
+        "admin.html",
+        user=user,
+        total_users=total_users,
+        total_courses=total_courses,
+        average_rating=average_rating
+    )
+
 
 if __name__ == "__main__":
     with app.app_context():
