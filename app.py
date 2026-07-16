@@ -32,6 +32,9 @@ app.register_blueprint(profile_bp)
 app.register_blueprint(admin_bp)
 
 app.register_blueprint(recommendation_bp)
+# Create database tables
+with app.app_context():
+    db.create_all()
 
 app.register_blueprint(ai_bp)
 
@@ -60,7 +63,4 @@ def internal_server_error(error):
     return render_template("errors/500.html"), 500
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
     app.run(debug=True)
