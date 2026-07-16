@@ -1,0 +1,91 @@
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            <i class="bi bi-mortarboard-fill"></i>
+        </div>
+
+        <div>
+            <h4>AI Learning Hub</h4>
+            <small>Learn Smarter</small>
+        </div>
+
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="{{ url_for('dashboard.dashboard') }}"
+                class="{% if request.endpoint and request.endpoint.startswith('dashboard.') %}active{% endif %}">
+                <i class="bi bi-grid-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('courses.courses') }}"
+                class="{% if request.endpoint and request.endpoint.startswith('courses.') %}active{% endif %}">
+                <i class="bi bi-book-fill"></i>
+                <span>Courses</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('profile.profile') }}"
+                class="{% if request.endpoint and request.endpoint.startswith('profile.') %}active{% endif %}">
+                <i class="bi bi-person-fill"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('ai.ai') }}"
+                class="{% if request.endpoint and request.endpoint.startswith('ai.') %}active{% endif %}">
+                <i class="bi bi-stars"></i>
+                <span>AI Assistant</span>
+            </a>
+        </li>
+
+        {% if session.get("role") == "admin" %}
+
+        <li>
+            <a href="{{ url_for('admin.admin') }}"
+                class="{% if request.endpoint and request.endpoint.startswith('admin.') %}active{% endif %}">
+                <span>Users</span>
+            </a>
+        </li>
+
+        {% endif %}
+
+        <li>
+            <a href="{{ url_for('admin.analytics') }}"
+                class="{% if request.endpoint=='admin.analytics' %}active{% endif %}">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span>Analytics</span>
+            </a>
+        </li>
+
+
+        {% if session.get("role")=="admin" %}
+
+        <li>
+            <a href="{{ url_for('admin.admin') }}"
+                class="{% if request.endpoint=='admin.admin' %}active{% endif %}">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Admin</span>
+            </a>
+        </li>
+
+        {% endif %}
+
+        <li>
+            <a href="{{ url_for('auth.logout') }}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+
+    </ul>
+
+</aside>

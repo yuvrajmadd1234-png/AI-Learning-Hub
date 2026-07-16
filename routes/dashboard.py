@@ -9,9 +9,11 @@ dashboard_bp = Blueprint("dashboard", __name__)
 def dashboard():
 
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User, session["user_id"])
 
     courses = Course.query.all()
+
+    total_users = User.query.count()
 
     total_courses = len(courses)
 
@@ -22,10 +24,14 @@ def dashboard():
 
     total_categories = len(set(c.category for c in courses))
 
+    recent_courses = Course.query.order_by(Course.id.desc()).limit(5).all()
+
     return render_template(
-        "dashboard.html",
-        user=user,
-        total_courses=total_courses,
-        average_rating=average_rating,
-        total_categories=total_categories
-    )
+    "dashboard.html",
+    user=user,
+    total_users=total_users,
+    total_courses=total_courses,
+    average_rating=average_rating,
+    total_categories=total_categories,
+    recent_courses=recent_courses
+)

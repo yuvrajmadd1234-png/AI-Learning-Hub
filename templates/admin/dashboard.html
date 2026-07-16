@@ -1,0 +1,268 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid fade-up">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                Admin Dashboard
+            </h2>
+
+            <p class="text-muted">
+                Welcome back, {{ user.name }}
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="btn btn-danger">
+
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+
+        </a>
+
+    </div>
+
+    <div class="row mb-4">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-lg p-4 hero-card">
+
+                <h2 class="fw-bold">
+                    Welcome Back 👋
+                </h2>
+
+                <p class="text-muted mb-3">
+                    Manage users, courses and AI recommendations from one place.
+                </p>
+                
+                <a href="{{ url_for('admin.analytics') }}"
+                    class="btn btn-info">
+
+                    <i class="bi bi-bar-chart-fill"></i>
+
+                     Analytics
+
+                </a>
+
+                <a href="{{ url_for('courses.add_course') }}"
+                class="btn btn-primary">
+
+                    <i class="bi bi-plus-circle"></i>
+
+                    Add New Course
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-lg p-4 text-center hero-card">
+
+                <h6 class="text-muted">
+                    AI Recommendation Engine
+                </h6>
+
+                <h1 class="display-4 fw-bold text-primary">
+                    98%
+                </h1>
+
+                <small class="text-success">
+                    Accuracy
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Stats -->
+
+    <div class="row">
+
+        <div class="col-lg-3 mb-4">
+
+            <a href="{{ url_for('admin.users') }}"
+                class="text-decoration-none text-dark">
+
+                <div class="admin-card">
+
+                    <i class="bi bi-people-fill fs-2 text-primary"></i>
+
+                    <h6 class="mt-3">
+                        Total Users
+                    </h6>
+
+                    <h2>{{ total_users }}</h2>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="admin-card">
+
+                <i class="bi bi-book-fill fs-2 text-success"></i>
+
+                <h6 class="mt-3">
+                    Total Courses
+                </h6>
+
+                <h2>{{ total_courses }}</h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="admin-card">
+
+                <i class="bi bi-tags-fill fs-2 text-warning"></i>
+
+                <h6 class="mt-3">
+                    Categories
+                </h6>
+
+                <h2>{{ total_categories }}</h2>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="admin-card">
+
+                <i class="bi bi-star-fill fs-2 text-danger"></i>
+
+                <h6 class="mt-3">
+                    Average Rating
+                </h6>
+
+                <h2>{{ average_rating }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row mt-4">
+
+        <!-- Analytics -->
+        <div class="col-lg-8 mb-4">
+
+            <div class="card border-0 shadow-lg p-4">
+
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    Platform Analytics
+                </h5>
+
+                <div style="height:320px;">
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-4 mb-4">
+
+            <div class="card border-0 shadow-lg p-4">
+
+                <h5 class="fw-bold mb-3">
+                    Quick Actions
+                </h5>
+
+                <div class="d-grid gap-3">
+
+                    <a href="{{ url_for('courses.add_course') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+                        Add Course
+                    </a>
+
+                    <a href="{{ url_for('courses.courses') }}" class="btn btn-success">
+                        <i class="bi bi-book"></i>
+                        Manage Courses
+                    </a>
+
+                    <a href="{{ url_for('admin.users') }}"
+                        class="btn btn-warning">
+                        <i class="bi bi-people"></i>
+                        Manage Users
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div> 
+
+<script>
+const ctx = document.getElementById("analyticsChart");
+
+if (ctx) {
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Users", "Courses", "Categories", "Rating"],
+            datasets: [{
+                label: "Platform Statistics",
+                data: [
+                    {{ total_users }},
+                    {{ total_courses }},
+                    {{ total_categories }},
+                    {{ average_rating }}
+                ],
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+</script>
+
+{% endblock %}

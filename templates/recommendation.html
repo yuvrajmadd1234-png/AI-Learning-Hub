@@ -1,46 +1,63 @@
-<!DOCTYPE html>
-<html>
+{% extends "layouts/base.html" %}
 
-<head>
+{% block title %}
+AI Recommendations
+{% endblock %}
 
-    <title>Recommendations</title>
+{% block content %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="container-fluid">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-</head>
+        <div>
 
-<body class="bg-light">
+            <h2 class="fw-bold">
+                🎯 AI Course Recommendations
+            </h2>
 
-<div class="container mt-5">
+            <p class="text-muted mb-0">
+                Personalized recommendations based on:
+                <strong>{{ interest }}</strong>
+            </p>
 
-    <h1 class="text-center mb-3">
-        🎯 Recommended Courses
-    </h1>
+        </div>
 
-    <h4 class="text-center text-primary mb-5">
-        Based on your interest: {{ interest }}
-    </h4>
+        <div>
+
+            <a href="{{ url_for('dashboard.dashboard') }}"
+               class="btn btn-primary">
+
+                <i class="bi bi-house-fill"></i>
+                Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% if courses %}
 
     <div class="row">
 
         {% for course in courses %}
 
-        <div class="col-md-6 mb-4">
+        <div class="col-lg-6 mb-4">
 
-            <div class="card shadow-lg h-100">
+            <div class="card shadow-sm border-0 h-100">
 
                 <div class="card-body">
 
-                    <h3 class="card-title">
-                        📘 {{ course.Course }}
-                    </h3>
+                    <div class="d-flex justify-content-between">
 
-                    <hr>
+                        <h4 class="fw-bold">
 
-                    <p>
+                            {{ course.Course }}
+
+                        </h4>
+
                         {% if course.Level == "Beginner" %}
 
                         <span class="badge bg-success">
@@ -60,29 +77,56 @@
                         </span>
 
                         {% endif %}
+
+                    </div>
+
+                    <hr>
+
+                    <p>
+
+                        <i class="bi bi-folder-fill text-primary"></i>
+
+                        <strong>Category:</strong>
+
+                        {{ course.Category }}
+
                     </p>
 
                     <p>
-                        ⏳ <b>Duration:</b> {{ course.Duration }}
+
+                        <i class="bi bi-clock-fill text-success"></i>
+
+                        <strong>Duration:</strong>
+
+                        {{ course.Duration }}
+
                     </p>
 
                     <p>
-                        ⭐ <b>Rating:</b> {{ course.Rating }}/5
+
+                        <i class="bi bi-star-fill text-warning"></i>
+
+                        <strong>Rating:</strong>
+
+                        {{ course.Rating }}/5
+
                     </p>
 
                     {% if course.Match is defined %}
 
                     <p>
-                        🎯 <b>Match Score:</b> {{ course.Match }}%
+                        <strong>Match Score:</strong>
+                        {{ course.Match }}%
                     </p>
 
                     <div class="progress mb-3">
 
-                        <div
-                            class="progress-bar bg-success"
+                        <div class="progress-bar bg-success"
                             role="progressbar"
-                            style="width: {{ course.Match|int }}%;"
-                            aria-valuenow="{{ course.Match|int }}"
+                            {% if course.Match is defined %}
+                            style="width: {{ course.Match }}%;"
+                            {% endif %}
+                            aria-valuenow="{{ course.Match }}"
                             aria-valuemin="0"
                             aria-valuemax="100">
 
@@ -94,9 +138,10 @@
 
                     {% endif %}
 
-                    <p>
-                        📝 <b>Description:</b><br>
+                    <p class="text-muted">
+
                         {{ course.Description }}
+
                     </p>
 
                 </div>
@@ -109,20 +154,32 @@
 
     </div>
 
-    <div class="text-center mt-4">
+    {% else %}
 
-        <a href="/" class="btn btn-primary">
-            🏠 Home
-        </a>
+    <div class="card shadow-sm border-0">
 
-        <a href="/login" class="btn btn-success">
-            📚 Dashboard
-        </a>
+        <div class="card-body text-center py-5">
+
+            <i class="bi bi-search fs-1 text-secondary"></i>
+
+            <h3 class="mt-3">
+
+                No Courses Found
+
+            </h3>
+
+            <p class="text-muted">
+
+                Try another category or search keyword.
+
+            </p>
+
+        </div>
 
     </div>
 
+    {% endif %}
+
 </div>
 
-</body>
-
-</html>
+{% endblock %}

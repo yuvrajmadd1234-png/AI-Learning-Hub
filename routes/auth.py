@@ -19,7 +19,7 @@ def login():
 
             session["user_id"] = user.id
             session["user_name"] = user.name
-
+            session["role"] = user.role
             return redirect(url_for("dashboard.dashboard"))
             
 

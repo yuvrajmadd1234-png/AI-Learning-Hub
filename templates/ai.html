@@ -1,0 +1,75 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+AI Study Assistant
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-body p-5">
+
+                    <h2 class="fw-bold mb-2">
+                        🤖 AI Study Assistant
+                    </h2>
+
+                    <p class="text-muted mb-4">
+                        Ask any academic question and get an AI-powered explanation.
+                    </p>
+
+                    <form method="POST">
+
+                        <textarea
+                            class="form-control mb-3"
+                            name="prompt"
+                            rows="6"
+                            placeholder="Example: Explain Binary Search in simple language..."
+                            required></textarea>
+
+                        <button class="btn btn-primary">
+                            <i class="bi bi-stars"></i>
+                            Ask AI
+                        </button>
+
+                    </form>
+
+                    {% if answer %}
+
+                    <hr class="my-4">
+
+                    <div class="card bg-light border-0">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold">
+                                AI Response
+                            </h5>
+
+                            <div style="white-space:pre-wrap;">
+                                {{ answer }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

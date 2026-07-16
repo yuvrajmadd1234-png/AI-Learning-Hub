@@ -8,11 +8,17 @@ courses_bp = Blueprint("courses", __name__)
 @login_required
 def courses():
 
-    all_courses = Course.query.all()
+    page = request.args.get("page", 1, type=int)
+
+    courses = Course.query.paginate(
+        page=page,
+        per_page=10,
+        error_out=False
+    )
 
     return render_template(
         "courses.html",
-        courses=all_courses
+        courses=courses
     )
 
 @courses_bp.route("/add_course", methods=["GET", "POST"])
@@ -43,7 +49,7 @@ def add_course():
         db.session.add(new_course)
         db.session.commit()
 
-        #flash("Course added successfully!", "success")
+        flash("Course added successfully!", "success")
 
         return redirect(url_for("courses.courses"))
     return render_template("add_course.html")
@@ -62,6 +68,8 @@ def delete_course(id):
     db.session.delete(course)
     db.session.commit()
 
+    flash("Course deleted successfully!", "success")
+
     return redirect(url_for("courses.courses"))
 
 @courses_bp.route("/edit_course/<int:id>", methods=["GET", "POST"])
@@ -70,8 +78,10 @@ def edit_course(id):
 
     user = db.session.get(User, session["user_id"])
 
-    flash("You don't have permission to access this page.", "danger")
-    return redirect(url_for("dashboard.dashboard"))
+    if user.role != "admin":
+        flash("You don't have permission to access this page.", "danger")
+        return redirect(url_for("dashboard.dashboard"))
+
     course = Course.query.get_or_404(id)
 
     if request.method == "POST":
@@ -83,7 +93,10 @@ def edit_course(id):
 
         db.session.commit()
 
+        flash("Course updated successfully!", "success")
+
         return redirect(url_for("courses.courses"))
+
     return render_template(
         "edit_course.html",
         course=course

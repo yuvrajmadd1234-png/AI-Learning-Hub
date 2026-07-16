@@ -1,0 +1,241 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+Analytics
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+                📊 Analytics Dashboard
+            </h2>
+
+            <p class="text-muted">
+                Platform insights and learning statistics
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('admin.admin') }}"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back
+
+        </a>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Total Users</h6>
+
+                    <h2 class="fw-bold text-primary">
+                        {{ total_users }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Total Courses</h6>
+
+                    <h2 class="fw-bold text-success">
+                        {{ total_courses }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Categories</h6>
+
+                    <h2 class="fw-bold text-warning">
+                        {{ total_categories }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body text-center">
+
+                    <h6>Average Rating</h6>
+
+                    <h2 class="fw-bold text-danger">
+                        ⭐ {{ average_rating }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Charts -->
+
+    <div class="row">
+
+        <div class="col-lg-8 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-4">
+                        Monthly Growth
+                    </h5>
+
+                    <div style="height:350px;">
+
+                        <canvas id="growthChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-4">
+                        Platform Distribution
+                    </h5>
+
+                    <div style="height:350px;">
+
+                        <canvas id="pieChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const growth = document.getElementById("growthChart");
+
+if(growth){
+
+new Chart(growth,{
+
+type:"line",
+
+data:{
+
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+
+datasets:[{
+
+label:"Users",
+
+data:[5,12,20,28,35,50],
+
+fill:true,
+
+tension:.4,
+
+borderWidth:3
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false
+
+}
+
+});
+
+}
+
+const pie=document.getElementById("pieChart");
+
+if(pie){
+
+new Chart(pie,{
+
+type:"doughnut",
+
+data:{
+
+labels:["Courses","Users","AI"],
+
+datasets:[{
+
+data:[{{ total_courses }},{{ total_users }},98]
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false
+
+}
+
+});
+
+}
+
+</script>
+
+{% endblock %}

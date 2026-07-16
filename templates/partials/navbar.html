@@ -1,0 +1,111 @@
+<nav class="top-navbar">
+
+    <div class="search-box">
+
+        <i class="bi bi-search"></i>
+
+        <input
+            type="text"
+            id="globalSearch"
+            placeholder="Search courses...">
+
+    </div>
+
+    <div class="navbar-right">
+
+        <div class="position-relative">
+
+            <button class="icon-btn">
+
+                <i class="bi bi-bell"></i>
+
+            </button>
+
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                3
+
+            </span>
+
+        </div>
+
+        <button class="icon-btn"
+                id="themeToggle">
+
+            <i class="bi bi-moon-fill"
+                id="themeIcon"></i>
+
+        </button>
+
+        <div class="dropdown">
+
+            <div class="user-profile"
+                data-bs-toggle="dropdown"
+                style="cursor:pointer;">
+
+                <div class="avatar">
+
+                    {{ session.get("user_name","U")[0]|upper }}
+
+                </div>
+
+                <div>
+
+                    <strong>{{ session.get("user_name") }}</strong>
+
+                    <small>{{ session.get("role","Student")|title }}</small>
+
+                </div>
+
+            </div>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                <li>
+
+                    <a class="dropdown-item"
+                        href="{{ url_for('profile.profile') }}">
+
+                        <i class="bi bi-person-circle"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="dropdown-item"
+                        href="{{ url_for('dashboard.dashboard') }}">
+
+                        <i class="bi bi-grid"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+
+                    <a class="dropdown-item text-danger"
+                        href="{{ url_for('auth.logout') }}">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>

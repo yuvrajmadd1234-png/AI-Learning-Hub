@@ -1,0 +1,55 @@
+.admin-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:30px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.admin-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.admin-card h6{
+
+    color:gray;
+
+}
+
+.admin-card h2{
+
+    font-size:38px;
+
+    font-weight:bold;
+
+}
+
+.hero-card{
+
+    border-radius:25px;
+
+    background:linear-gradient(135deg,#ffffff,#f8fbff);
+
+}
+
+.hero-card h2{
+
+    font-weight:700;
+
+}
+
+.hero-card:hover{
+
+    transform:translateY(-5px);
+
+    transition:.35s;
+
+}

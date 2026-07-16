@@ -1,0 +1,19 @@
+.app-wrapper{
+
+    display:flex;
+
+}
+
+.content-area{
+
+    margin-left:270px;
+
+    width:calc(100% - 270px);
+
+    min-height:100vh;
+
+    background:#F8FAFC;
+
+    padding:30px;
+    
+}

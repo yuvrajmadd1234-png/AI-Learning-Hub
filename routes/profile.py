@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from models import db, User
 from utils import login_required
+from flask import flash
 
 profile_bp = Blueprint("profile", __name__)
 
@@ -16,10 +17,9 @@ def profile():
     )
 
 @profile_bp.route("/edit_profile", methods=["GET", "POST"])
+@login_required
 def edit_profile():
 
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
 
     user = db.session.get(User, session["user_id"])
 
@@ -29,6 +29,8 @@ def edit_profile():
         user.email = request.form["email"]
 
         db.session.commit()
+
+        flash("Profile updated successfully!", "success")
 
         return redirect(url_for("profile.profile"))
 

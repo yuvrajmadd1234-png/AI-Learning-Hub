@@ -1,52 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intelligent Recommendation System</title>
+{% extends "layouts/public.html" %}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% block title %}
+Home
+{% endblock %}
 
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">🎓 EduAI</div>
+{% block content %}
 
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/courses_page">Courses</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li>
-        </ul>
-    </nav>
+<!-- Navigation Bar -->
+<nav>
+    <div class="logo">🎓 EduAI</div>
 
-    <!-- Hero Section -->
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/courses_page">Courses</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+    </ul>
+</nav>
 
-    <section class="hero">
+<!-- Hero Section -->
 
-        <h1>Intelligent Recommendation System for E-Learning</h1>
+<section class="hero">
 
-        <p>
-            Learn smarter with AI-powered personalized course recommendations.
-        </p>
+    <h1>Intelligent Recommendation System for E-Learning</h1>
 
-        <div class="buttons">
+    <p>
+        Learn smarter with AI-powered personalized course recommendations.
+    </p>
 
-            <a href="/login">
-                <button>Login</button>
-            </a>
+    <div class="buttons">
 
-            <a href="/register">
-                <button class="register-btn">Register</button>
-            </a>
+        <a href="{{ url_for('auth.login') }}">
+            <button>Login</button>
+        </a>
 
-        </div>
+        <a href="{{ url_for('auth.register') }}">
+            <button class="register-btn">Register</button>
+        </a>
 
-    </section>
+    </div>
 
-    <!-- Features Section -->
+</section>
+
+<!-- Features Section -->
 
 <section class="container my-5">
 
@@ -179,5 +176,4 @@
 
 </footer>
 
-</body>
-</html>
+{% endblock %}
