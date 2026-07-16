@@ -61,10 +61,13 @@ def register():
             role=role
         )
 
-        db.session.add(new_user)
-        db.session.commit()
-
-        return "<h2>Registration Successful! 🎉</h2><br><a href='/login'>Go to Login</a>"
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            return "<h2>Registration Successful! 🎉</h2><br><a href='/login'>Go to Login</a>"
+        except Exception as e:
+            db.session.rollback()
+            return f"<pre>{type(e).__name__}: {e}</pre>"
 
     return render_template("register.html")
 
